@@ -284,7 +284,6 @@ pageMod.PageMod({
         panel.hide();
         panel.show();
       }
-
       // update our document dimensions
       dimensions = getDocumentDimensions();
     });
@@ -303,6 +302,8 @@ pageMod.PageMod({
         launchVideo(opts);
       } else if (opts.domain.indexOf('vimeo.com')  > -1) {
         opts.getUrlFn = getVimeoUrl;
+        launchVideo(opts);
+      } else if (opts.domain.indexOf('vine.co') > -1) {
         launchVideo(opts);
       }
     });

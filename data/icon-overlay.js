@@ -73,6 +73,35 @@ if ((host.indexOf('vimeo.com') > -1)  && vimeoDetailContainer) {
   vimeoDetailContainer.appendChild(tmp);
 }
 
+// VINE HOMEPAGE
+// Vine homepage renders after window.onload, so wait 2 seconds before looking 
+// for playable videos in the page.
+setTimeout(() => {
+  const vineHomeContainers = Array.from(document.querySelectorAll('.vine-video-container'));
+  console.log(vineHomeContainers);
+  if ((host.indexOf('vine.co') > -1)  && vineHomeContainers.length) {
+    console.log('vine check passed');
+    vineHomeContainers.forEach(el => {
+      el.classList.add('minvid__overlay__wrapper');
+      const tmp = getTemplate();
+      tmp.addEventListener('click', function(ev) {
+        evNoop(ev);
+        const posterEl = el.querySelector('video').getAttribute('poster');
+        const src = posterEl.replace(/thumbs/, 'videos').split('.jpg')[0];
+        if (src) {
+          console.log("src is: " + src);
+          self.port.emit('launch', {
+            url: window.location.href,
+            domain: host,
+            src: src
+          });
+        } else console.error('Error parsing url from Vine homepage', el); // eslint-disable-line no-console
+      });
+      el.appendChild(tmp);
+    });
+  }
+}, 2000);
+
 function getTemplate() {
   const containerEl = document.createElement('div');
   const iconEl = document.createElement('div');
